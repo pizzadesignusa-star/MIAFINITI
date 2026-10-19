@@ -35,7 +35,7 @@
 
   --m: clamp(20px, 4vw, 64px);
   --max: 1320px;
-  --gap-section: clamp(96px, 12vw, 176px);
+  --gap-section: clamp(72px, 8vw, 120px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
 }
@@ -92,6 +92,15 @@ h2 em, h1 em { font-style: italic; }
 .nav { display: flex; gap: 34px; font-size: var(--step-small); letter-spacing: 0.18em; text-transform: uppercase; }
 .nav a { text-decoration: none; }
 .brand { font: 400 1.6rem/1 var(--serif); letter-spacing: 0.32em; text-decoration: none; padding-left: 0.32em; }
+.nav-drop { position: relative; }
+.drop-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0 0 2px; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.drop-btn svg { width: 9px; fill: none; stroke: currentColor; stroke-width: 1.2; transition: transform 300ms var(--ease); }
+.nav-drop.open .drop-btn svg { transform: rotate(180deg); }
+.drop { position: absolute; top: calc(100% + 18px); left: -22px; min-width: 270px; padding: 10px 0; background: var(--milk); border-top: 1px solid var(--gold); box-shadow: 0 18px 40px rgba(52, 10, 15, 0.18); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 250ms var(--ease), transform 250ms var(--ease), visibility 0s 250ms; }
+.nav-drop.open .drop { opacity: 1; visibility: visible; transform: none; transition: opacity 250ms var(--ease), transform 250ms var(--ease); }
+.drop a { display: block; padding: 11px 22px; font: 400 1.125rem/1.2 var(--serif); letter-spacing: 0; text-transform: none; color: var(--wine); transition: background-color 200ms ease, color 200ms ease; }
+.drop a:hover, .drop a:focus-visible { background: var(--cream); color: var(--choco); }
+.coll { scroll-margin-top: 96px; }
 .header-right { display: flex; justify-content: flex-end; align-items: center; gap: 22px; font-size: var(--step-small); letter-spacing: 0.18em; text-transform: uppercase; }
 .cart-btn { display: inline-flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; font-size: var(--step-small); padding: 8px 0; }
 .cart-btn svg { width: 20px; height: 20px; }
@@ -106,32 +115,34 @@ h2 em, h1 em { font-style: italic; }
 }
 
 /* ---------- hero ---------- */
-.hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: 6fr 6fr; background: var(--wine); color: var(--milk); overflow: hidden; }
-.hero-text { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 140px var(--m) clamp(48px, 7vh, 88px); }
-.hero h1 { font: 300 clamp(2.4rem, 5.4vw, 6.25rem)/0.95 var(--serif); letter-spacing: 0.08em; margin-left: -0.04em; white-space: nowrap; }
+.hero { position: relative; min-height: 100svh; display: grid; place-items: center; text-align: center; color: var(--milk); overflow: hidden;
+  background: radial-gradient(ellipse 70% 60% at 50% 42%, var(--wine-soft) 0%, var(--wine) 55%, var(--wine-deep) 100%); }
+.hero-fx { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.hero-text { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; padding: 130px var(--m) 120px; }
+.hero-mark { width: clamp(72px, 8vw, 128px); fill: none; stroke: var(--gold-soft); stroke-width: 3; margin-bottom: clamp(20px, 3vh, 36px); }
+.hero h1 { font: 300 clamp(3rem, 9vw, 9.5rem)/0.95 var(--serif); letter-spacing: 0.14em; margin-right: -0.14em; white-space: nowrap; }
+.hero-rule { margin-top: clamp(22px, 3vh, 34px); display: flex; align-items: center; gap: 14px; }
+.hero-rule i { display: block; width: clamp(60px, 10vw, 150px); height: 1px; background: var(--gold-soft); opacity: 0.7; }
+.hero-rule svg { width: 14px; fill: var(--gold-soft); }
 .hero .tagline { margin-top: 26px; font: italic 300 clamp(1.5rem, 1.2rem + 1vw, 2.125rem)/1.2 var(--serif); color: var(--gold-soft); }
-.hero .desc { margin-top: 26px; max-width: 38ch; color: rgba(250, 246, 239, 0.8); font-size: var(--step-lead); line-height: 1.6; }
-.hero .btn { margin-top: 44px; align-self: flex-start; }
-.hero-photo { position: relative; overflow: hidden; }
-.hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; }
-.hero-photo::after { content: ""; position: absolute; inset: 0; background: rgba(52, 10, 15, 0.12); }
+.hero .desc { margin-top: 22px; max-width: 46ch; color: rgba(250, 246, 239, 0.8); font-size: var(--step-lead); line-height: 1.6; }
+.hero .btn { margin-top: 40px; }
 .scroll-hint { position: absolute; z-index: 2; left: 50%; bottom: 26px; translate: -50% 0; width: 1px; height: 54px; background: rgba(250, 246, 239, 0.25); overflow: hidden; }
 .scroll-hint::after { content: ""; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--milk); animation: drip 2.4s var(--ease) infinite; }
 @keyframes drip { to { top: 100%; } }
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; grid-template-rows: 58svh auto; min-height: 0; }
-  .hero-photo { order: -1; }
-  .hero-text { padding: 40px var(--m) 56px; }
-  .hero h1 { font-size: clamp(2.2rem, 11.5vw, 4rem); }
+  .hero-text { padding: 110px var(--m) 64px; }
+  .hero h1 { font-size: clamp(2.2rem, 12vw, 4.5rem); letter-spacing: 0.1em; margin-right: -0.1em; }
   .scroll-hint { display: none; }
 }
 
 /* ---------- brand statement ---------- */
 .about { display: grid; grid-template-columns: 1fr; justify-items: center; text-align: center; }
-.about .kicker { margin-bottom: 34px; }
-.about blockquote { font: 300 clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem)/1.25 var(--serif); max-width: 24ch; color: var(--wine); }
+.about { padding-top: clamp(56px, 6vw, 88px); }
+.about .kicker { margin-bottom: 22px; }
+.about blockquote { font: 300 clamp(1.625rem, 1.2rem + 1.8vw, 2.875rem)/1.25 var(--serif); max-width: 36ch; color: var(--wine); }
 .about blockquote em { color: var(--gold); }
-.pillars { margin-top: clamp(64px, 8vw, 112px); width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; text-align: left; }
+.pillars { margin-top: clamp(40px, 5vw, 72px); width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; text-align: left; }
 .pillar { padding-top: 24px; border-top: 1px solid var(--beige); }
 .pillar h3 { font: 400 var(--step-h3)/1.15 var(--serif); color: var(--wine); }
 .pillar p { margin-top: 12px; color: var(--choco-soft); }
@@ -150,6 +161,7 @@ h2 em, h1 em { font-style: italic; }
 .card-photo { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--cream); cursor: pointer; }
 .card-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 900ms var(--ease-soft), transform 1400ms var(--ease-soft); }
 .card-photo img + img { opacity: 0; }
+.card-photo img:nth-child(n+3) { display: none; }
 @media (hover: hover) and (pointer: fine) {
   .card:hover .card-photo img:first-child { transform: scale(1.04); }
   .card:hover .card-photo img + img { opacity: 1; transform: scale(1.04); }
@@ -163,32 +175,50 @@ h2 em, h1 em { font-style: italic; }
 .add { background: none; border: 0; border-bottom: 1px solid var(--wine); padding: 6px 0; cursor: pointer; color: var(--wine); font-size: var(--step-small); letter-spacing: 0.18em; text-transform: uppercase; transition: color 300ms ease, border-color 300ms ease; }
 .add:hover { color: var(--gold); border-color: var(--gold); }
 .add.done { color: var(--gold); border-color: var(--gold); }
+.grid .card.card--wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 2.4vw, 36px); align-items: center; }
+.card--wide .card-photo { aspect-ratio: 1 / 1; }
+.card--wide .card-body { padding: 0 clamp(0px, 5vw, 80px); flex: none; gap: 14px; }
+.card--wide .desc { font-size: 1rem; line-height: 1.75; max-width: 34em; }
+.card--wide .card-foot { margin-top: 18px; }
+.coll + .coll { margin-top: clamp(80px, 9vw, 136px); }
+.coll-head { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding-top: 22px; margin-bottom: clamp(28px, 3vw, 44px); border-top: 1px solid var(--beige); }
+.coll-title { font: 300 clamp(1.75rem, 1.4rem + 1.4vw, 2.625rem)/1.1 var(--serif); color: var(--choco); }
+.coll-title em { color: var(--wine); }
+.coll-count { font-size: var(--step-small); letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+.coll-empty { color: var(--choco-soft); font: italic 300 1.25rem/1.5 var(--serif); }
 .catalog-note { margin-top: 48px; color: var(--choco-soft); font-size: var(--step-small); }
-@media (max-width: 960px) { .grid { grid-template-columns: 1fr 1fr; } .grid .card, .grid .card:nth-child(-n+2) { grid-column: auto; } .grid .card:nth-child(-n+2) .card-photo { aspect-ratio: 4 / 5; } .grid .card:last-child { grid-column: 1 / -1; } .grid .card:last-child .card-photo { aspect-ratio: 16 / 10; } }
-@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .grid .card:last-child .card-photo { aspect-ratio: 4 / 5; } }
+@media (max-width: 960px) { .grid { grid-template-columns: 1fr 1fr; } .grid .card, .grid .card:nth-child(-n+2) { grid-column: auto; } .grid .card:nth-child(-n+2) .card-photo { aspect-ratio: 4 / 5; } .grid .card:last-child:nth-child(odd):not(.card--wide) { grid-column: 1 / -1; } .grid .card:last-child:nth-child(odd):not(.card--wide) .card-photo { aspect-ratio: 16 / 10; } .grid .card.card--wide { grid-column: 1 / -1; } .card--wide .card-body { padding: 0; } }
+@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .grid .card:last-child .card-photo { aspect-ratio: 4 / 5; } .grid .card.card--wide { display: flex; align-items: stretch; } .card--wide .card-body { padding-top: 22px; flex: 1; gap: 8px; } .card--wide .card-foot { margin-top: auto; } }
 
-/* ---------- packaging ---------- */
-.pack { display: grid; grid-template-columns: 6fr 5fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
-.pack-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end; }
-.pack-photos figure { overflow: hidden; background: var(--cream); }
-.pack-photos figure:first-child { aspect-ratio: 3 / 4; }
-.pack-photos figure:last-child { aspect-ratio: 3 / 3.4; margin-bottom: 64px; }
-.pack-photos img { width: 100%; height: 112%; margin-top: -6%; object-fit: cover; }
-.pack-text .kicker { display: block; margin-bottom: 22px; }
-.pack-text p { margin-top: 24px; font-size: var(--step-lead); color: var(--choco-soft); max-width: 38ch; }
-.pack-list { margin-top: 28px; display: grid; gap: 12px; }
-.pack-list li { display: flex; gap: 14px; align-items: baseline; }
-.pack-list li::before { content: ""; flex: none; width: 18px; height: 1px; background: var(--gold); transform: translateY(-4px); }
-@media (max-width: 900px) { .pack { grid-template-columns: 1fr; } .pack-photos figure:last-child { margin-bottom: 32px; } }
 
 /* ---------- custom orders ---------- */
+.story { background: var(--cream); }
+.story-in { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 6vw, 112px); padding-top: clamp(80px, 10vw, 140px); padding-bottom: clamp(80px, 10vw, 140px); }
+.story-head { align-self: start; }
+.story-head .kicker { display: block; margin-bottom: 24px; }
+.story-head h2 { color: var(--choco); }
+.story-head h2 em { color: var(--wine); }
+.story-photo { margin-top: clamp(32px, 4vw, 56px); aspect-ratio: 3 / 4; max-width: 440px; overflow: hidden; background: var(--beige); }
+.story-photo img { width: 100%; height: 100%; object-fit: cover; }
+.story-text { display: grid; gap: 1.25em; font-size: var(--step-lead); line-height: 1.75; color: var(--choco-soft); max-width: 40em; }
+.story-text p:first-child::first-letter { float: left; font: 400 4.2em/0.8 var(--serif); color: var(--wine); padding: 0.06em 0.12em 0 0; }
+.story-quote { grid-column: 1 / -1; margin-top: clamp(24px, 3vw, 48px); padding-top: clamp(48px, 6vw, 80px); border-top: 1px solid var(--beige); text-align: center; display: grid; justify-items: center; }
+.story-quote blockquote { font: 300 clamp(1.625rem, 1.2rem + 1.8vw, 2.75rem)/1.3 var(--serif); color: var(--choco); max-width: 28ch; }
+.story-quote blockquote em { color: var(--wine); }
+.story-quote figcaption { margin-top: 32px; display: grid; gap: 10px; font-size: var(--step-lead); color: var(--choco-soft); }
+.story-quote figcaption span { font: italic 400 1.5rem/1 var(--serif); color: var(--gold); }
+@media (max-width: 860px) { .story-in { grid-template-columns: 1fr; } }
 .custom { background: var(--wine); color: var(--milk); }
 .custom-in { display: grid; grid-template-columns: 7fr 5fr; gap: 48px; align-items: end; padding-top: clamp(80px, 10vw, 140px); padding-bottom: clamp(80px, 10vw, 140px); }
 .custom .kicker { color: var(--gold-soft); display: block; margin-bottom: 24px; }
 .custom h2 em { color: var(--gold-soft); }
 .custom p { color: rgba(250, 246, 239, 0.8); font-size: var(--step-lead); max-width: 40ch; }
 .custom .btn { margin-top: 32px; }
+.custom-photos { grid-column: 1 / -1; margin-top: clamp(16px, 3vw, 40px); display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.custom-photos figure { aspect-ratio: 4 / 5; overflow: hidden; background: var(--wine-deep); }
+.custom-photos img { width: 100%; height: 100%; object-fit: cover; }
 @media (max-width: 900px) { .custom-in { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .custom-photos { grid-template-columns: 1fr 1fr; gap: 10px; } .custom-photos figure:first-child { grid-column: 1 / -1; aspect-ratio: 4 / 3.4; } }
 
 /* ---------- contacts + footer ---------- */
 .contacts { text-align: center; padding-bottom: clamp(64px, 8vw, 112px); }
@@ -266,7 +296,7 @@ h2 em, h1 em { font-style: italic; }
 .viewer.on { pointer-events: auto; }
 .viewer.on .viewer-in { opacity: 1; transform: none; }
 .viewer-photos { position: relative; background: var(--cream); aspect-ratio: 4 / 5; }
-.viewer-photos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 600ms var(--ease); }
+.viewer-photos > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 600ms var(--ease); }
 .thumbs { position: absolute; left: 16px; bottom: 16px; display: flex; gap: 8px; }
 .thumbs button { width: 54px; height: 66px; padding: 0; border: 1px solid transparent; cursor: pointer; background: var(--cream); overflow: hidden; opacity: 0.75; transition: opacity 300ms ease, border-color 300ms ease; }
 .thumbs button[aria-current="true"] { border-color: var(--milk); opacity: 1; }
@@ -281,23 +311,22 @@ h2 em, h1 em { font-style: italic; }
 
 
 /* ---------- candlelight: glow, embers, cursor light ---------- */
-.hero-photo .glow { position: absolute; z-index: 1; left: 18%; top: 4%; width: 70%; aspect-ratio: 1; pointer-events: none; mix-blend-mode: soft-light;
+.hero-fx .glow { position: absolute; z-index: 1; left: 50%; top: 42%; width: min(90vw, 900px); translate: -50% -50%; aspect-ratio: 1; pointer-events: none; mix-blend-mode: soft-light;
   background: radial-gradient(circle, rgba(255, 196, 120, 0.55) 0%, rgba(255, 170, 90, 0.18) 38%, rgba(255, 160, 80, 0) 68%); }
-.hero-photo .cursor-light { position: absolute; z-index: 1; left: 0; top: 0; width: 520px; height: 520px; margin: -260px 0 0 -260px; pointer-events: none; opacity: 0; mix-blend-mode: soft-light;
+.hero-fx .cursor-light { position: absolute; z-index: 1; left: 0; top: 0; width: 520px; height: 520px; margin: -260px 0 0 -260px; pointer-events: none; opacity: 0; mix-blend-mode: soft-light;
   background: radial-gradient(circle, rgba(255, 210, 150, 0.6) 0%, rgba(255, 190, 120, 0) 65%); transition: opacity 900ms var(--ease); will-change: transform; }
-.hero-photo:hover .cursor-light { opacity: 1; }
+.hero:hover .cursor-light { opacity: 1; }
 .hero canvas { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .fly { position: fixed; z-index: 80; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--wine); box-shadow: 0 0 0 4px rgba(176, 144, 92, 0.35); pointer-events: none; }
 @media (prefers-reduced-motion: no-preference) {
-  .hero-photo .glow { animation: flicker 5.2s ease-in-out infinite; }
-  .js .card[data-reveal] .card-photo { clip-path: inset(100% 0 0 0); transition: clip-path 1400ms cubic-bezier(0.76, 0, 0.24, 1); transition-delay: calc(var(--i, 0) * 120ms + 100ms); }
-  .js .card[data-reveal] .card-photo img:first-child { transform: scale(1.15); transition: transform 2000ms var(--ease-soft), opacity 900ms var(--ease-soft); transition-delay: calc(var(--i, 0) * 120ms + 100ms); }
+  .hero-fx .glow { animation: flicker 5.2s ease-in-out infinite; }
+  .js .card[data-reveal] { transition: opacity 500ms var(--ease), transform 600ms var(--ease); transition-delay: calc(var(--i, 0) * 60ms); }
+  .js .card[data-reveal] .card-photo { clip-path: inset(100% 0 0 0); transition: clip-path 700ms cubic-bezier(0.76, 0, 0.24, 1); transition-delay: calc(var(--i, 0) * 60ms); }
+  .js .card[data-reveal] .card-photo img:first-child { transform: scale(1.08); transition: transform 1000ms var(--ease-soft), opacity 900ms var(--ease-soft); transition-delay: calc(var(--i, 0) * 60ms); }
   .js .card.is-in .card-photo { clip-path: inset(0 0 0 0); }
   .js .card.is-in .card-photo img:first-child { transform: none; }
   .js h2[data-reveal] { transform: translateY(48px); letter-spacing: 0.04em; transition: opacity 1400ms var(--ease), transform 1400ms var(--ease), letter-spacing 1800ms var(--ease); }
   .js h2[data-reveal].is-in { letter-spacing: -0.005em; }
-  .js .pack-photos figure[data-reveal] img { clip-path: inset(100% 0 0 0); transition: clip-path 1500ms cubic-bezier(0.76, 0, 0.24, 1); transition-delay: calc(var(--i, 0) * 150ms + 150ms); }
-  .js .pack-photos figure.is-in img { clip-path: inset(0); }
   [data-drift] { will-change: transform; }
 }
 @keyframes flicker {
@@ -313,12 +342,12 @@ h2 em, h1 em { font-style: italic; }
 
 /* ---------- motion ---------- */
 @media (prefers-reduced-motion: no-preference) {
-  .js .hero-photo img { transform: scale(1.12); animation: settle 2400ms var(--ease-soft) forwards; }
   .js .hero canvas { opacity: 0; animation: fadeIn 2000ms var(--ease) 1200ms forwards; }
   .js .hero [data-in] { opacity: 0; transform: translateY(22px); animation: rise 1200ms var(--ease) forwards; animation-delay: calc(var(--i, 0) * 160ms + 300ms); }
   .js .hero h1 span { display: inline-block; opacity: 0; transform: translateY(0.35em); filter: blur(6px); animation: letter 1300ms var(--ease) forwards; animation-delay: calc(var(--l) * 70ms + 200ms); }
   .js [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity 1100ms var(--ease), transform 1300ms var(--ease); transition-delay: calc(var(--i, 0) * 110ms); }
   .js [data-reveal].is-in { opacity: 1; transform: none; }
+  .js #catalog .coll-head, .js #catalog .catalog-note, .js #catalog .catalog-head [data-reveal] { transition: opacity 600ms var(--ease), transform 700ms var(--ease), letter-spacing 900ms var(--ease); transition-delay: calc(var(--i, 0) * 60ms); }
   .js .pillar[data-reveal] { border-top-color: transparent; }
   .js .pillar.is-in { border-top-color: var(--beige); transition: opacity 1100ms var(--ease), transform 1300ms var(--ease), border-color 1600ms var(--ease) 300ms; }
 }
@@ -333,14 +362,21 @@ h2 em, h1 em { font-style: italic; }
 <header class="header" id="header">
   <div class="wrap header-in">
     <nav class="nav" aria-label="Разделы">
-      <a class="link" href="#catalog">Каталог</a>
+      <div class="nav-drop">
+        <button class="link drop-btn" type="button" aria-expanded="false" aria-controls="drop-menu">Каталог<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button>
+        <div class="drop" id="drop-menu">
+          <a href="#new-year">Новогодняя коллекция</a>
+          <a href="#magic">Магическая коллекция</a>
+          <a href="#interior">Интерьерная коллекция</a>
+        </div>
+      </div>
       <a class="link" href="#about">О бренде</a>
       <a class="link" href="#custom">На заказ</a>
       <a class="link" href="#contacts">Контакты</a>
     </nav>
     <a class="brand" href="#top" aria-label="MIAFINITI, наверх">MIAFINITI</a>
     <div class="header-right">
-      <a class="link tg-top" href="https://t.me/" target="_blank" rel="noopener" data-tg>Telegram</a>
+      <a class="link tg-top" href="https://t.me/MIAFINITI" target="_blank" rel="noopener" data-tg>Telegram</a>
       <button class="cart-btn" type="button" id="cart-open" aria-label="Открыть корзину">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
         <span class="cart-count" id="cart-count">0</span>
@@ -352,17 +388,18 @@ h2 em, h1 em { font-style: italic; }
 <main id="top">
 
 <section class="hero" aria-labelledby="hero-h">
-  <div class="hero-text">
-    <h1 id="hero-h" aria-label="MIAFINITI"><span style="--l:0">M</span><span style="--l:1">I</span><span style="--l:2">A</span><span style="--l:3">F</span><span style="--l:4">I</span><span style="--l:5">N</span><span style="--l:6">I</span><span style="--l:7">T</span><span style="--l:8">I</span></h1>
-    <p class="tagline" data-in style="--i:1">Любовь, что горит мягко.</p>
-    <p class="desc" data-in style="--i:2">Авторские интерьерные свечи ручной работы. Они становятся частью интерьера, особенным подарком и способом добавить в каждый день немного красоты.</p>
-    <a class="btn btn-milk" href="#catalog" data-in style="--i:3">Смотреть каталог</a>
+  <div class="hero-fx" aria-hidden="true">
+    <span class="glow"></span>
+    <span class="cursor-light" id="cursor-light"></span>
+    <canvas id="embers"></canvas>
   </div>
-  <div class="hero-photo">
-    <span class="glow" aria-hidden="true"></span>
-    <span class="cursor-light" id="cursor-light" aria-hidden="true"></span>
-    <canvas id="embers" aria-hidden="true"></canvas>
-    <img src="img/hero.jpg" width="2000" height="1500" data-drift="0.08" alt="Бордовые свечи MIAFINITI — карусель с золотыми лошадками и барашек — рядом с крафтовой коробкой" fetchpriority="high">
+  <div class="hero-text">
+    <svg class="hero-mark" data-in viewBox="0 0 120 56" aria-hidden="true"><path d="M60 28C51 15 43 8 32 8 20 8 11 17 11 28s9 20 21 20c11 0 19-7 28-20 9-13 17-20 28-20 12 0 21 9 21 20s-9 20-21 20c-11 0-19-7-28-20z"/></svg>
+    <h1 id="hero-h" aria-label="MIAFINITI"><span style="--l:0">M</span><span style="--l:1">I</span><span style="--l:2">A</span><span style="--l:3">F</span><span style="--l:4">I</span><span style="--l:5">N</span><span style="--l:6">I</span><span style="--l:7">T</span><span style="--l:8">I</span></h1>
+    <div class="hero-rule" data-in style="--i:1" aria-hidden="true"><i></i><svg viewBox="0 0 20 20"><path d="M10 0l1.6 8.4L20 10l-8.4 1.6L10 20l-1.6-8.4L0 10l8.4-1.6z"/></svg><i></i></div>
+    <p class="tagline" data-in style="--i:2">Любовь, что горит мягко.</p>
+    <p class="desc" data-in style="--i:3">Авторские интерьерные свечи ручной работы. Они становятся частью интерьера, особенным подарком и способом добавить в каждый день немного красоты.</p>
+    <a class="btn btn-milk" href="#catalog" data-in style="--i:4">Смотреть каталог</a>
   </div>
   <span class="scroll-hint" aria-hidden="true"></span>
 </section>
@@ -386,51 +423,81 @@ h2 em, h1 em { font-style: italic; }
     </div>
   </div>
 
-  <div class="grid" id="grid">
+  <div class="coll" id="new-year">
+  <div class="coll-head" data-reveal><h3 class="coll-title">Новогодняя <em>коллекция</em></h3><span class="coll-count">5 позиций</span></div>
+  <div class="grid">
     <article class="card" data-id="north" data-type="set" data-price="999" data-reveal>
-      <div class="card-photo"><img src="img/carousel-milk.jpg" alt="Белая свеча-карусель и белый барашек" loading="lazy" style="object-position:35% 50%"><img src="img/carousel-milk-2.jpg" alt="" loading="lazy"></div>
-      <div class="card-body"><h3>«Северная нежность»</h3><p class="desc">Белая карусель и белый барашек. Нежный молочный набор для светлого интерьера.</p>
+      <div class="card-photo"><img src="img/north-1.jpg" alt="Молочная свеча-карусель и молочный барашек" loading="lazy"><img src="img/north-5.jpg" alt="" loading="lazy"><img src="img/north-2.jpg" alt="" loading="lazy"><img src="img/north-3.jpg" alt="" loading="lazy"><img src="img/north-4.jpg" alt="" loading="lazy"></div>
+      <div class="card-body"><h3>«Северная нежность»</h3><p class="desc">Нежность, воплощённая в воске. Изящная карусель и очаровательный барашек в молочном оттенке создают атмосферу уюта и волшебства. Маленький ритуал для больших желаний.</p>
       <div class="card-foot"><span class="price">999 ₽</span><button class="add" type="button">В корзину</button></div></div>
     </article>
     <article class="card" data-id="bordo" data-type="set" data-price="999" data-reveal style="--i:1">
-      <div class="card-photo"><img src="img/carousel-bordo.jpg" alt="Бордовая свеча-карусель с золотыми лошадками и бордовый барашек" loading="lazy" style="object-position:30% 50%"><img src="img/set-carousel-box.jpg" alt="" loading="lazy"></div>
-      <div class="card-body"><h3>Бордовая карусель и барашек</h3><p class="desc">Бордовая карусель с золотыми лошадками и бордовый барашек.</p>
+      <div class="card-photo"><img src="img/bordo-1.jpg" alt="Бордовая свеча-карусель с золотыми лошадками и бордовый барашек" loading="lazy"><img src="img/bordo-2.jpg" alt="" loading="lazy"><img src="img/bordo-3.jpg" alt="" loading="lazy"><img src="img/bordo-4.jpg" alt="" loading="lazy"><img src="img/bordo-5.jpg" alt="" loading="lazy"></div>
+      <div class="card-body"><h3>«Бургунди»</h3><p class="desc">Глубокий бордовый, золотые детали и немного магии. Элегантный дуэт свечей станет выразительным акцентом интерьера и особенным подарком, наполненным теплом и смыслом.</p>
       <div class="card-foot"><span class="price">999 ₽</span><button class="add" type="button">В корзину</button></div></div>
     </article>
     <article class="card" data-id="santa" data-type="set" data-price="690" data-reveal style="--i:2">
-      <div class="card-photo"><img src="img/santa.jpg" alt="Молочная свеча в форме рельефного Деда Мороза" loading="lazy"><img src="img/santa-2.jpg" alt="" loading="lazy"></div>
-      <div class="card-body"><h3>«Время чудес»</h3><p class="desc">Скульптурная свеча Дед Мороз с проработанным рельефом.</p>
+      <div class="card-photo"><img src="img/santa-new-1.jpg" alt="Молочная скульптурная свеча — современный Дед Мороз" loading="lazy"><img src="img/santa-new-3.jpg" alt="" loading="lazy"><img src="img/santa-new-2.jpg" alt="" loading="lazy"></div>
+      <div class="card-body"><h3>«Время чудес»</h3><p class="desc">Сила, характер и новогоднее волшебство в одной необычной свече. Современный образ Деда Мороза напоминает — самые смелые желания достойны исполнения. Для тех, кто привык мечтать масштабно.</p>
       <div class="card-foot"><span class="price">690 ₽</span><button class="add" type="button">В корзину</button></div></div>
     </article>
     <article class="card" data-id="snow-trio" data-type="set" data-price="590" data-reveal>
-      <div class="card-photo"><img src="img/set-snow.jpg" alt="Набор из трёх свечей-снежинок: две молочные и голубая" loading="lazy"><img src="img/set-snow-2.jpg" alt="" loading="lazy"></div>
-      <div class="card-body"><h3>«Снежное трио»</h3><p class="desc">Набор из трёх ажурных снежинок.</p>
+      <div class="card-photo"><img src="img/snow-new-1.jpg" alt="Набор из трёх свечей-снежинок: две молочные и голубая" loading="lazy"><img src="img/snow-new-3.jpg" alt="" loading="lazy"><img src="img/snow-new-2.jpg" alt="" loading="lazy"></div>
+      <div class="card-body"><h3>«Снежное трио»</h3><p class="desc">Тонкое кружево воска, нежные оттенки и красота каждой детали. Три резные снежинки словно хранят мгновение зимнего волшебства, приглашая загадать самое сокровенное желание.</p>
       <div class="card-foot"><span class="price">590 ₽</span><button class="add" type="button">В корзину</button></div></div>
     </article>
     <article class="card" data-id="forest" data-type="set" data-price="690" data-reveal style="--i:1">
-      <div class="card-photo"><img src="img/set-winter.jpg" alt="Набор: оленёнок и две снежинки у подарочной коробки" loading="lazy"><img src="img/deer-2.jpg" alt="" loading="lazy"></div>
+      <div class="card-photo"><img src="img/forest-1.jpg" alt="Набор: молочный оленёнок и две снежинки" loading="lazy"><img src="img/forest-2.jpg" alt="" loading="lazy"><img src="img/forest-3.jpg" alt="" loading="lazy"></div>
       <div class="card-body"><h3>«Лесное волшебство»</h3><p class="desc">Две снежинки и оленёнок с золотой короной на фитиле.</p>
       <div class="card-foot"><span class="price">690 ₽</span><button class="add" type="button">В корзину</button></div></div>
     </article>
   </div>
+  </div>
+
+  <div class="coll" id="magic">
+  <div class="coll-head" data-reveal><h3 class="coll-title">Магическая <em>коллекция</em></h3><span class="coll-count">1 позиция</span></div>
+  <div class="grid">
+    <article class="card card--wide" data-id="tarot" data-type="candle" data-price="890" data-reveal style="--i:2">
+      <div class="card-photo"><img src="img/tarot-1.jpg" alt="Молочная скульптурная свеча — девушка с картами Таро" loading="lazy"><img src="img/tarot-3.jpg" alt="" loading="lazy"><img src="img/tarot-2.jpg" alt="" loading="lazy"><img src="img/tarot-4.jpg" alt="" loading="lazy"><img src="img/tarot-5.jpg" alt="" loading="lazy"></div>
+      <div class="card-body"><h3>«Таролог»</h3><p class="desc">Воплощение женской мудрости, интуиции и загадочной магии Таро. Изящная свеча с утончёнными деталями символизирует связь с собой, внутреннюю силу и веру в собственный путь. Для тех, кто умеет слышать своё сердце, доверять знакам судьбы и превращать мечты в реальность.</p>
+      <div class="card-foot"><span class="price">890 ₽</span><button class="add" type="button">В корзину</button></div></div>
+    </article>
+  </div>
+  </div>
+
+  <div class="coll" id="interior">
+  <div class="coll-head" data-reveal><h3 class="coll-title">Интерьерная <em>коллекция</em></h3><span class="coll-count">1 позиция</span></div>
+  <div class="grid">
+    <article class="card card--wide" data-id="tapers" data-type="set" data-price="490" data-reveal>
+      <div class="card-photo"><img src="img/tapers-1.jpg" alt="Набор из трёх молочных столовых свечей: две гладкие и одна витая" loading="lazy"><img src="img/tapers-2.jpg" alt="" loading="lazy"></div>
+      <div class="card-body"><h3>Набор столовых свечей</h3><p class="desc">Три свечи&nbsp;— три воплощения элегантности. Утончённые линии, плавные изгибы и&nbsp;нежный молочный оттенок создают идеальный баланс красоты и&nbsp;минимализма. Этот подарочный набор наполнит пространство теплом, уютом и&nbsp;особенной атмосферой, в&nbsp;которой хочется замедлиться, насладиться моментом и&nbsp;помечтать.</p>
+      <div class="card-foot"><span class="price">490 ₽</span><button class="add" type="button">В корзину</button></div></div>
+    </article>
+  </div>
+  </div>
   <p class="catalog-note" data-reveal>Каждая свеча сделана вручную, поэтому оттенок и рельеф могут немного отличаться от фотографии.</p>
 </section>
 
-<section class="section wrap" aria-labelledby="pack-h">
-  <div class="pack">
-    <div class="pack-photos">
-      <figure data-reveal><img data-drift="0.05" src="img/pack-box.jpg" alt="Крафтовая коробка с логотипом MIAFINITI" loading="lazy"></figure>
-      <figure data-reveal style="--i:1"><img data-drift="-0.05" src="img/pack-wrap.jpg" alt="Свеча, обёрнутая в бордовую бумагу с фирменной печатью, в коробке" loading="lazy"></figure>
-    </div>
-    <div class="pack-text">
-      <span class="kicker" data-reveal>Упаковка</span>
-      <h2 id="pack-h" data-reveal style="--i:1">Подарок, который хочется <em>открывать медленно</em></h2>
-      <p data-reveal style="--i:2">Каждая свеча приезжает готовой к вручению.</p>
-      <ul class="pack-list" data-reveal style="--i:3">
-        <li>Крафтовая коробка с логотипом</li>
-        <li>Бордовая бумага и фирменная печать</li>
-        <li>Открытка с пожеланием по вашему желанию</li>
-      </ul>
+<section class="section" id="story" aria-labelledby="story-h">
+  <div class="story">
+    <div class="wrap story-in">
+      <div class="story-head">
+        <span class="kicker" data-reveal>История MIAFINITI</span>
+        <h2 id="story-h" data-reveal style="--i:1">Бренд, созданный с&nbsp;<em>любовью и&nbsp;верой в&nbsp;мечты</em></h2>
+        <figure class="story-photo" data-reveal style="--i:2"><img src="img/story.jpg" alt="Мия и Афина — дочери Анастасии, в честь которых назван бренд MIAFINITI" loading="lazy"></figure>
+      </div>
+      <div class="story-text" data-reveal style="--i:2">
+        <p>Меня зовут Анастасия, мне 26&nbsp;лет, и&nbsp;я&nbsp;мама двух замечательных девочек. Именно они стали моим главным вдохновением и&nbsp;подарили имя бренду MIAFINITI&nbsp;— названию, в&nbsp;котором соединились частички их&nbsp;имён&nbsp;— Мия и&nbsp;Афина, моя любовь и&nbsp;нечто бесконечно дорогое сердцу.</p>
+        <p>Для меня MIAFINITI&nbsp;— гораздо больше, чем просто свечи. Это отражение моего взгляда на&nbsp;жизнь, в&nbsp;котором всегда есть место красоте, развитию, вдохновению и&nbsp;мечтам.</p>
+        <p>Я&nbsp;верю, что счастье складывается из&nbsp;мелочей. Из&nbsp;тихих уютных вечеров, искренних улыбок, маленьких побед и&nbsp;моментов, когда мы&nbsp;позволяем себе остановиться и&nbsp;почувствовать жизнь.</p>
+        <p>Я&nbsp;верю в&nbsp;постоянный рост, в&nbsp;смелость идти своим путём, меняться, открывать новое и&nbsp;никогда не&nbsp;переставать мечтать. Ведь каждый большой путь начинается с&nbsp;маленького шага, а&nbsp;каждая мечта&nbsp;— с&nbsp;веры в&nbsp;её&nbsp;исполнение.</p>
+        <p>Именно эту философию я&nbsp;вкладываю в&nbsp;каждое изделие MIAFINITI. Мне хочется создавать не&nbsp;просто красивые вещи, а&nbsp;маленькие символы вдохновения, которые будут напоминать: твои желания имеют значение, а&nbsp;счастье начинается внутри тебя.</p>
+        <p>Этот бренд&nbsp;— частичка моей души, моей семьи и&nbsp;моей собственной дороги к&nbsp;мечте.</p>
+      </div>
+      <figure class="story-quote" data-reveal>
+        <blockquote>Красота окружает тех, кто готов её&nbsp;увидеть. А&nbsp;чудеса случаются с&nbsp;теми, кто <em>не&nbsp;перестаёт в&nbsp;них верить.</em></blockquote>
+        <figcaption>Спасибо, что Вы&nbsp;здесь 🤍<span>Анастасия</span></figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -444,7 +511,12 @@ h2 em, h1 em { font-style: italic; }
       </div>
       <div>
         <p data-reveal style="--i:2">Создадим свечи в нужном цвете и количестве, с вашей открыткой или логотипом на упаковке. Работаем с индивидуальными и корпоративными заказами.</p>
-        <a class="btn btn-milk" href="https://t.me/" target="_blank" rel="noopener" data-tg data-reveal style="--i:3">Обсудить в Telegram</a>
+        <a class="btn btn-milk" href="https://t.me/MIAFINITI" target="_blank" rel="noopener" data-tg data-reveal style="--i:3">Обсудить в Telegram</a>
+      </div>
+      <div class="custom-photos">
+        <figure data-reveal><img src="img/corp-1.jpg" alt="Крафтовые коробки MIAFINITI с фирменной лентой для корпоративного заказа" loading="lazy"></figure>
+        <figure data-reveal style="--i:1"><img src="img/corp-2.jpg" alt="Подарочная коробка со свечой, бордовой лентой и открыткой «Спасибо»" loading="lazy"></figure>
+        <figure data-reveal style="--i:2"><img src="img/corp-3.jpg" alt="Витые свечи разных цветов в фирменных коробках с окошком" loading="lazy"></figure>
       </div>
     </div>
   </div>
@@ -455,7 +527,7 @@ h2 em, h1 em { font-style: italic; }
   <h2 id="contacts-h" data-reveal style="--i:1">Напишите нам — <em>подберём свечу</em> к&nbsp;вашему интерьеру</h2>
   <p data-reveal style="--i:2">Отвечаем на вопросы о свечах, сроках и доставке, принимаем заказы.</p>
   <div class="social" data-reveal style="--i:3">
-    <a class="btn btn-solid" href="https://t.me/" target="_blank" rel="noopener" data-tg>Telegram</a>
+    <a class="btn btn-solid" href="https://t.me/MIAFINITI" target="_blank" rel="noopener" data-tg>Telegram</a>
     <a class="btn btn-wine" href="https://www.threads.net/" target="_blank" rel="noopener" data-threads>Threads</a>
   </div>
 </section>
@@ -468,7 +540,7 @@ h2 em, h1 em { font-style: italic; }
     <a class="brand" href="#top">MIAFINITI</a>
     <div class="footer-right">
       <a href="privacy.html">Политика конфиденциальности</a>
-      <a href="https://t.me/" target="_blank" rel="noopener" data-tg>Telegram</a>
+      <a href="https://t.me/MIAFINITI" target="_blank" rel="noopener" data-tg>Telegram</a>
       <a href="https://www.threads.net/" target="_blank" rel="noopener" data-threads>Threads</a>
     </div>
   </div>
@@ -499,7 +571,7 @@ h2 em, h1 em { font-style: italic; }
     <div class="done-box" id="done">
       <p>Спасибо за заказ</p>
       <p>Текст заказа скопирован. Отправьте его нам в Telegram — мы подтвердим наличие, сроки и доставку.</p>
-      <a class="btn btn-solid" href="https://t.me/" target="_blank" rel="noopener" data-tg>Открыть Telegram</a>
+      <a class="btn btn-solid" href="https://t.me/MIAFINITI" target="_blank" rel="noopener" data-tg>Открыть Telegram</a>
     </div>
   </div>
   <div class="drawer-foot" id="drawer-foot">
@@ -524,7 +596,17 @@ h2 em, h1 em { font-style: italic; }
 
 <script>
 // ===== Настройки бренда: впишите сюда настоящие ссылки =====
-const TELEGRAM_URL = 'https://t.me/';            // например https://t.me/miafiniti
+// catalog dropdown in the header
+(() => {
+  const box = document.querySelector('.nav-drop'), btn = box.querySelector('.drop-btn');
+  const set = (on) => { box.classList.toggle('open', on); btn.setAttribute('aria-expanded', String(on)); };
+  btn.addEventListener('click', (e) => { e.stopPropagation(); set(!box.classList.contains('open')); });
+  box.querySelectorAll('.drop a').forEach((a) => a.addEventListener('click', () => set(false)));
+  document.addEventListener('click', (e) => { if (!box.contains(e.target)) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
+})();
+
+const TELEGRAM_URL = 'https://t.me/MIAFINITI';
 const THREADS_URL = 'https://www.threads.net/';  // например https://www.threads.net/@miafiniti
 // ===========================================================
 
@@ -645,7 +727,7 @@ const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 (() => {
   const light = document.getElementById('cursor-light');
   if (!light || calm || !matchMedia('(hover: hover)').matches) return;
-  const box = light.parentElement;
+  const box = light.closest('.hero');
   let x = 0, y = 0, tx = 0, ty = 0, raf = 0;
   const loop = () => { x += (tx - x) * 0.08; y += (ty - y) * 0.08; light.style.transform = `translate3d(${x}px, ${y}px, 0)`; raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(loop) : 0; };
   box.addEventListener('pointermove', (e) => { const r = box.getBoundingClientRect(); tx = e.clientX - r.left; ty = e.clientY - r.top; if (!raf) raf = requestAnimationFrame(loop); });
@@ -720,7 +802,7 @@ const viewer = (() => {
 (() => {
   const t = document.querySelectorAll('[data-reveal]');
   if (!('IntersectionObserver' in window)) { t.forEach((e) => e.classList.add('is-in')); return; }
-  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -2% 0px', threshold: 0.02 });
   t.forEach((e) => io.observe(e));
   addEventListener('load', () => setTimeout(() => t.forEach((e) => { const r = e.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) e.classList.add('is-in'); }), 2500));
 })();
